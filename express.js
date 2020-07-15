@@ -11,7 +11,9 @@ const passport = require('passport');
 require('./services/passport_setup');
 const cookieSession = require('cookie-session');
 require('./services/mongoose_setup');
-require('dotenv').config();
+if (!(process.env.NODE_ENV === "production")) {
+    require('dotenv').config();
+}
 const {allow, deny} = require('./services/privileges');
 const slowDown = require("express-slow-down");
 const port = process.env.PORT;

@@ -2,7 +2,9 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const Profile = require('../models/profiles');
-require('dotenv').config();
+if (!(process.env.NODE_ENV === "production")) {
+    require('dotenv').config();
+}
 const bcrypt = require('bcrypt');
 const blacklist = require('./blacklist');
 

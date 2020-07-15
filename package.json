@@ -27,7 +27,8 @@
     "cross-env": "^7.0.2"
   },
   "scripts": {
-    "test": "clear && nodemon express.js"
+    "test": "clear && nodemon express.js",
+    "start": "NODE_ENV=production node express.js"
   },
   "keywords": [],
   "author": "",
