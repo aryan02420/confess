@@ -50,7 +50,7 @@ passport.use(new GoogleStrategy({
 passport.use(new LocalStrategy(
     (username, password, done) => {
         if (username.toString() === 'guest' && password.toString() === 'guest') {
-            Profile.findById('5eff20cf1851860f724d3217').then(
+            Profile.findById('5f0f43b2ce38e10950744956').then(
                 (guestProfile) => { done(null, guestProfile); }
             );
         } else {
