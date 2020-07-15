@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPGC Confessions</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+    <div class="center" style="padding:10rem">
+
+        <% if (user) { %>
+        <button class="center" style="padding:1rem 2rem;margin:1rem;display:block"><a href="/auth/google">Sign in with BITS Mail</a></button>
+        <%} else { %>
+        <button class="center" style="padding:1rem 2rem;margin:1rem;display:block"><a href="/posts">View Posts</a></button>
+        <button class="center" style="padding:1rem 2rem;margin:1rem;display:block"><a href="/posts/new">Add Post</a></button>
+        <button class="center" style="padding:1rem 2rem;margin:1rem;display:block"><a href="/chat">Chat</a></button>
+        <button class="center" style="padding:1rem 2rem;margin:1rem;display:block"><a href="/auth/logout">Logout</a></button>
+        <% } %>
+    </div>
+
+</body>
+</html>

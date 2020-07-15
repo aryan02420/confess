@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head>
+  <link rel="stylesheet" type="text/css" href="/global.css">
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <nav>
+    <a class="soft square" href="/" onclick="event.preventDefault();history.back()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+      <svg>
+        <path fill="currentColor"
+          d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"
+          class=""></path>
+      </svg>
+    </a>
+  </nav>
+  <div class="add">
+      <div class="soft square">
+          <input type="checkbox" name="darkmode" id="darkmode">
+      </div>
+  </div>
+  <section class="" style="min-height:100vh;">
+    <div id="inputs" class="center">
+      <form class="" id="post_form">
+        <div class="flex-container">
+          <div>
+            <input class="soft" type="color" id="fgcolor" value="#333333">
+            <input class="soft" type="color" id="bgcolor" value="#ffdd00">
+          </div>
+          <div>
+            <button class="soft" name="confess" id="submit">POST</button>
+          </div>
+        </div>
+        <div>
+          <textarea class="soft soft-inv" name="maintext" id="maintext" rows="18" cols="36" maxlength="683" wrap="soft" placeholder="What's in your mind?" required=""></textarea>
+        </div>
+        <div>
+          <textarea class="soft soft-inv" name="sign" id="sign" rows="1" cols="24" maxlength="24" wrap="soft" placeholder="Signature" required=""></textarea>
+        </div>
+        <!-- <div> DEPRECATED FEATURE. USE DRAGnDROP INSTEAD.
+          <label for="bgimg" class="upload">Upload Image</label>
+          <input type="file" id="bgimg" name="bgimg" accept="image/png, image/jpeg">
+        </div> -->
+        <div class="hidden">
+          <input type="hidden" name="time" id="time" readonly required></input>
+          <input type="hidden" name="image" id="result" readonly required></input>
+          <input type="hidden" name="thumbnail" id="thumbnail" readonly required></input>
+        </div>
+        <div><p class="soft soft-inv error"></p></div>
+      </form>
+    </div>
+    <div id="preview" class="center" style="width:auto"></div>
+  </section>
+  <script src="/p5.js"></script>
+  <script src="/sketch.js"></script>
+  <script src="/initialize.js"></script>
+  <script src="/post_post.js"></script>
+  <script src="/darkmode.js"></script>
+</body></html>

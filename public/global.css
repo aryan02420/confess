@@ -1,0 +1,120 @@
+/* @import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities"; */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Roboto:wght@300&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+html {
+  --bg-color:#dbdbdb;
+  --text-color:#303030;
+  --neo-bg-color: #e0e0e0;
+  --neo-bg-color-light: #ffffff;
+  --neo-bg-color-dark: #bebebe;
+  --neo-bg-color-light-alt: #f0f0f0;
+  --neo-bg-color-dark-alt: #cacaca;
+  --error-bg-color: #ff707a;
+  --error-bg-color-light: #ff818c;
+  --error-bg-color-dark: #d95f68;
+
+}
+
+html[data-theme="dark"] {
+  --bg-color:#303030;
+  --text-color:#dbdbdb;
+  --neo-bg-color:#303030;
+  --neo-bg-color-light: #3a3a3a;
+  --neo-bg-color-dark: #262626;
+  --neo-bg-color-light-alt: #333333;
+  --neo-bg-color-dark-alt: #2b2b2b;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.soft, .p5Canvas, #posts>img, #post_img {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  width: 300px;
+  padding: 15px 25px;
+  margin: 25px 35px;
+  border: none;
+  border-radius: 15px;
+  background: var(--neo-bg-color);
+  color: inherit;
+  box-shadow:  5px 5px 15px var(--neo-bg-color-dark),
+               -5px -5px 15px var(--neo-bg-color-light);
+}
+
+.post-info, .comment-form {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  width: 300px;
+}
+
+.soft:hover {
+  background: linear-gradient(145deg, var(--neo-bg-color-dark-alt), var(--neo-bg-color-light-alt));
+}
+
+.soft:active, .soft:focus, .soft-inv {
+  background: var(--bg-color);
+  box-shadow: inset 5px 5px 15px var(--neo-bg-color-dark),
+              inset -5px -5px 15px var(--neo-bg-color-light);
+}
+
+/* .soft:hover {
+  background: linear-gradient(145deg, var(--neo-bg-color-light-alt), var(--neo-bg-color-dark-alt));
+} */
+
+.error {
+  background: var(--error-bg-color);
+  box-shadow: inset 5px 5px 10px var(--error-bg-color-dark),
+              inset -5px -5px 10px var(--error-bg-color-light);
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+}
+
+.square {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.p5Canvas, #posts>img, #post_img{
+  margin: 0;
+  padding: 3px;
+  box-shadow:  5px 5px 15px var(--neo-bg-color-dark),
+               -5px -5px 15px var(--neo-bg-color-light),
+              inset 5px 5px 15px var(--neo-bg-color-dark),
+              inset -5px -5px 15px var(--neo-bg-color-light);
+}
+
+.post-info>*:first-child>* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+.user-comment>*:first-child>* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+.op {
+  text-decoration: underline;
+}

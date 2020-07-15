@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPGC Confessions</title>
+    <link rel="stylesheet" type="text/css" href="/global.css">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+
+    <nav>
+        <a class="soft square" href="/" onclick="event.preventDefault();history.back();"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <svg>
+                <path fill="currentColor"
+                d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"
+                class=""></path>
+            </svg>
+        </a>
+    </nav>
+    <div class="add">
+        <div class="soft square">
+            <input type="checkbox" name="darkmode" id="darkmode">
+        </div>
+    </div>
+
+    <section style="height:100vh;">
+        <div class="center flex-column" id="post">
+            <div class="flex-container post-info">
+                <div><span style="color:<%= (data.author.color || (data.author.rank.includes('admin') ? '#cc3333' : (data.author.rank.includes('moderator') ? '#00aa00' : '#1155dd'))) %>;"><%= data.author.name %></span></div>
+                <div><%= timeformatter.format(parseInt(data.time), 'twitter') %></div>
+            </div>
+            <img class="" id="post_img" src="<%= data.image %>">
+        </div>
+        <div class="center flex-column border-left">
+            <div id="comments">
+                <% data.comments.reverse().forEach((comment) => { %>
+                    <div class="user-comment">
+                        <div><span class="<% if (comment.author._id.toString()===data.author._id.toString()) { %>op<% } %>" style="color:<%= (comment.author.color || (comment.author.rank.includes('admin') ? '#cc3333' : (comment.author.rank.includes('moderator') ? '#00aa00' : '#1155dd'))) %>;"><%= comment.author.name %></span>: <%= comment.body %></div>
+                        <div><%= timeformatter.format(parseInt(comment.date), 'twitter') %></div>
+                    </div>
+                <% }) %>
+            </div>
+            <%if (user.rank.includes('user')) { %> 
+            <form id="comment-form" class="center">
+                <div class="soft soft-inv error">eror</div>
+                <input id="comment" class="soft soft-inv" type="text" placeholder="comment..." name="comment" required="" autocomplete="off" maxlength="200">
+                <button class="soft square" type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z" class=""></path></svg></button>
+            </form>
+            <% } %>
+        </div>
+    </section>
+
+    <%if (user.rank.includes('user')) { %> 
+    <script src="/post_comment.js"></script>
+    <% } %>
+    <script src="/darkmode.js"></script>
+
+</body>
+</html>

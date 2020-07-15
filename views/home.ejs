@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPGC Confessions</title>
+    <link rel="stylesheet" type="text/css" href="/global.css">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body style="overflow: hidden;">
+    <div class="add">
+        <div class="soft square">
+            <input type="checkbox" name="darkmode" id="darkmode">
+        </div>
+    </div>
+    <div class="center flex-column" style="height:100vh;">
+        <% if (!user) { %>
+            <a class="soft" href="/auth/google">Sign in with BITS Mail</a>
+            <a class="soft" id="guest-signin" href="#">Continue as Guest</a>
+            <script>
+                const POST_URL = '/auth/guest'
+                let formData = new URLSearchParams();
+                formData.append('username', 'guest');
+                formData.append('password', 'guest');
+                document.querySelector('#guest-signin')
+                .addEventListener('click', () => {
+                    event.preventDefault();
+                    fetch(POST_URL, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    }).then(response => {})
+                    .then(data => window.location.replace('/'))
+                    .catch(error => console.log(error))
+                });
+            </script>
+        <% } else if (user.rank.includes('guest')) { %>
+            <!-- <p><%= JSON.stringify(user.rank) %></p> -->
+            <a class="soft" href="/posts">View Posts</a>
+            <a class="soft" href="/auth/logout">Logout</a>
+        <% } else if (user.rank.includes('user')) { %> 
+            <!-- <p><%= JSON.stringify(user.rank) %></p> -->
+            <a class="soft" href="/posts">View Posts</a>
+            <a class="soft" href="/posts/new">Add Post</a>
+            <a class="soft" href="/chat">Chat</a>
+            <a class="soft" href="/auth/logout">Logout</a>   
+        <% } else { %>
+            <p>Easter Egg: You are not supposed to see this. H4CK3RM4N</p>
+        <% } %>
+    </div>
+
+    <script src="/darkmode.js"></script>
+
+</body>
+</html>

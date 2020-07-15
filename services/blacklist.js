@@ -1,0 +1,1 @@
+module.exports = '["af20190136@goa.bits-pilani.ac.in"]'
