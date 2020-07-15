@@ -28,7 +28,7 @@
   },
   "scripts": {
     "test": "clear && nodemon express.js",
-    "start": "NODE_ENV=production node express.js"
+    "start": "NODE_ENV=production && node express.js"
   },
   "keywords": [],
   "author": "",
