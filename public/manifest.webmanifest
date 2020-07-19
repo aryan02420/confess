@@ -1,0 +1,33 @@
+{
+    "name": "BPGC Confessions",
+    "short_name": "Confess",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#777777",
+    "theme_color": "#222222",
+    "description": "Anonymous Social network",
+    "categories": ["social", "anonymous"],
+    "icons": [{
+      "src": "images/48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    }, {
+      "src": "images/144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }, {
+      "src": "images/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }],
+    "screenshots" : [{
+      "src": "screenshot1.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    }, {
+      "src": "screenshot2.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    }]
+  }
