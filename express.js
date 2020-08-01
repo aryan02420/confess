@@ -19,6 +19,18 @@ const slowDown = require("express-slow-down");
 const port = process.env.PORT;
 
 
+app.enable('trust proxy');
+// redirect to https
+app.use ((req, res, next) => {
+    console.log(req.host)
+    if (req.secure || req.hostname === 'localhost') {
+        next();
+    } else {
+        res.redirect('https://' + req.headers.host + req.url);
+    }
+});
+
+
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 // app.use(cors());
