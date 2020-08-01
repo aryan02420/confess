@@ -53,7 +53,7 @@ app.use(passport.session());
 const speedLimiter = slowDown({
     windowMs: 1 * 60 * 1000, // 1 minutes
     delayAfter: 20, // allow 30 requests to go at full-speed, then...
-    delayMs: 1000 // 31st request has a 1s delay, 32nd has a 2s delay, 33rd gets 3s, etc.
+    delayMs: 2000 // 21st request has a 2s delay, 22nd has a 3s delay, 23rd gets 4s, etc.
 });
 
 
@@ -64,6 +64,9 @@ app.use('/auth', authRoutes);
 app.use('/posts', postRoutes);
 app.use('/chat', (req, res) => {
     res.render('chat');
+});
+app.use('/faq', (req, res) => {
+    res.render('faq');
 });
 app.use('/api', speedLimiter, apiRoutes);
 

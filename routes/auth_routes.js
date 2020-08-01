@@ -11,7 +11,9 @@ router.get('/google', passport.authenticate('google',{
 }));
 
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/auth/google' }), (req, res) => {
-    res.redirect('/');
+    const redirectTo = req.session.redirectTo || '/';
+    delete req.session.redirectTo;
+    res.redirect(redirectTo);
 });
 
 router.post('/guest', passport.authenticate('local'));

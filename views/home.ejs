@@ -9,6 +9,7 @@
         <div class="soft square">
             <input type="checkbox" name="darkmode" id="darkmode">
         </div>
+        <a href="/faq"><div class="soft square">?</div></a>
     </div>
     <div class="center flex-column" style="height:100vh;">
         <% if (!user) { %>
@@ -23,7 +24,7 @@
             <!-- <p><%= JSON.stringify(user.rank) %></p> -->
             <a class="soft" href="/posts">View Posts</a>
             <a class="soft" href="/posts/new">Add Post</a>
-            <a class="soft" href="/chat">Chat</a>
+            <!-- <a class="soft" href="/chat">Chat</a> -->
             <a class="soft" href="/auth/logout">Logout</a>   
         <% } else { %>
             <p>Easter Egg: You are not supposed to see this. H4CK3RM4N</p>
