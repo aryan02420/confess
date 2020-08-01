@@ -1,4 +1,6 @@
-cachedFiles = [
+const staticCache = 'sc-1';
+const dynamicCache = 'dc-1';
+const cachedFiles = [
     '/css/style.css',
     '/css/global.css',
     '/js/darkmode.js',
@@ -13,18 +15,28 @@ cachedFiles = [
   ]
 
 self.addEventListener('install', function(e) {
-    e.waitUntil(
-      caches.open('static').then(function(cache) {
-        return cache.addAll(cachedFiles);
-      })
-    );
-   });
+  e.waitUntil(
+    caches.open(staticCache).then(function(cache) {
+      return cache.addAll(cachedFiles);
+    })
+  );
+});
+
+self.addEventListener('activate', evt => {
+  evt.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(keys
+        .filter(key => key !== staticCache && key !== dynamicCache)
+        .map(key => caches.delete(key))
+      );
+    })
+  );
+});
    
-   self.addEventListener('fetch', function(e) {
-     console.log(e.request.url);
-     e.respondWith(
-       caches.match(e.request).then(function(response) {
-         return response || fetch(e.request);
-       })
-     );
-   });
+self.addEventListener('fetch', evt => {
+  evt.respondWith(
+    caches.match(evt.request).then(function(response) {
+      return response || fetch(evt.request);
+    })
+  );
+});

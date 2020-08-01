@@ -50,8 +50,7 @@ passport.use(new GoogleStrategy({
 passport.use(new LocalStrategy(
     (username, password, done) => {
         if (username.toString() === 'guest' && password.toString() === 'guest') {
-            Profile.findById('5f0f43b2ce38e10950744956').then((guestProfile) => {
-                console.log(guestProfile);
+            Profile.findById(process.env.guestId).then((guestProfile) => {
                 done(null, guestProfile);
             }).catch((err) => {
                 res.status(422);

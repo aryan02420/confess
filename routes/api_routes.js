@@ -9,6 +9,7 @@ const { isValidObjectId } = require('mongoose');
 TimeAgo.addLocale(en);
 const timeAgo = new TimeAgo('en-US');
 
+
 const getPosts = (req, res) => {
     let { skip = 0, limit = 6 } = req.query;
     skip = parseInt(skip) || 0;
@@ -38,12 +39,23 @@ const getPost = (req, res) => {
     let { post_id = 'none' } = req.query;
     post_id = post_id.toString().trim();
     if (/^[a-f0-9]{24}$/.test(post_id)) {
-        Post.findById(post_id).populate('author', 'name rank color').populate('comments.author', 'name rank color').select('author time image comments').then((post) => {
+        Post.findById(post_id).populate('author', 'name rank color').populate('comments.author', 'name rank color').select('author time image comments').then((opost) => {
+            let post = JSON.parse( JSON.stringify( opost ) );
+            post.time = timeAgo.format(parseInt(post.time), 'twitter');
+            post.comments.forEach(comment => {
+                if (comment.author._id.toString()===post.author._id.toString()) {
+                    comment.author.rank.push('op');
+                }
+                comment.date = timeAgo.format(parseInt(comment.date), 'twitter');
+                delete comment._id;
+                delete comment.author._id;
+            });
+            delete post.author._id;
             res.status(200);
             res.json(post);
-        }).catch((err) => {
+        }).catch(() => {
             res.status(422);
-            res.json({message: err});
+            res.json({message: 'Post Not Found'});
         });
     } else {
         res.status(422);
@@ -110,5 +122,6 @@ const addComment = (req, res) => {
 }
 
 router.post('/comment', allow(['user']), addComment);
+
 
 module.exports = router;

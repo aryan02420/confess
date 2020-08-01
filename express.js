@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express();
-const cors = require('cors');
+// const cors = require('cors');
 const bodyParser = require('body-parser');
 // const multer = require('multer');
 // const upload = multer();
@@ -21,14 +21,14 @@ const port = process.env.PORT;
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
-app.use(cors());
+// app.use(cors());
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: "1mb" }))
 app.use(bodyParser.urlencoded({ limit: "1mb", extended: true, parameterLimit: 5 }))
 
 app.use(cookieSession({
-    maxAge: 60 * 60 * 1000,
+    maxAge: 10 * 60 * 1000,      // 10 minutes
     keys: [
         process.env.cookieKey1,
         process.env.cookieKey2,
@@ -36,16 +36,24 @@ app.use(cookieSession({
         process.env.cookieKey4
     ],
     httpOnly: true,
-    sameSite: "lax"
+    sameSite: 'lax'
 }));
+
+// Update a value in the cookie so that the set-cookie will be sent.
+// Only changes every minute so that it's not sent with every request.
+// used for extending the session expiration.
+app.use((req, res, next) => {
+    req.session.nowInMinutes = Math.floor(Date.now() / 60e3);
+    next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 const speedLimiter = slowDown({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    delayAfter: 30, // allow 30 requests to go at full-speed, then...
-    delayMs: 1000 // 31sh request has a 1s delay, 32nd has a 2s delay, 33rd gets 3s, etc.
+    windowMs: 1 * 60 * 1000, // 1 minutes
+    delayAfter: 20, // allow 30 requests to go at full-speed, then...
+    delayMs: 1000 // 31st request has a 1s delay, 32nd has a 2s delay, 33rd gets 3s, etc.
 });
 
 

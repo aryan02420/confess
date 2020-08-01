@@ -1,6 +1,6 @@
 const form = document.querySelector('#comment-form');
-const error = document.querySelector('.error');
-const API_URL = '/api/comment';
+const error = document.querySelectorAll('.error')[1];
+const API_URL2 = '/api/comment';
 
 error.style.display = 'none';
 
@@ -14,8 +14,12 @@ form.addEventListener('submit', (event) => {
         comment
     };
 
-    if(true) {
-        fetch(API_URL, {
+    const isValidComment = (comment) => {
+        return comment && comment.toString().trim() !== '' && comment.toString().trim().length <= 200;
+    }
+
+    if(isValidComment(data.comment)) {
+        fetch(API_URL2, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {'content-type': 'application/json'}

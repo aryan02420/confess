@@ -20,23 +20,17 @@
             <input type="checkbox" name="darkmode" id="darkmode">
         </div>
     </div>
-
+    <div class="error soft soft-inv">err</div>
     <section style="height:100vh;">
         <div class="center flex-column" id="post">
             <div class="flex-container post-info">
-                <div><span style="color:<%= (data.author.color || (data.author.rank.includes('admin') ? '#cc3333' : (data.author.rank.includes('moderator') ? '#00aa00' : '#1155dd'))) %>;"><%= data.author.name %></span></div>
-                <div><%= timeformatter.format(parseInt(data.time), 'twitter') %></div>
+                <div><span id="name"></span></div>
+                <div id="time"></div>
             </div>
-            <img class="" id="post_img" src="<%= data.image %>">
+            <img class="" id="post_img" src="">
         </div>
         <div class="center flex-column border-left">
             <div id="comments">
-                <% data.comments.reverse().forEach((comment) => { %>
-                    <div class="user-comment">
-                        <div><span class="<% if (comment.author._id.toString()===data.author._id.toString()) { %>op<% } %>" style="color:<%= (comment.author.color || (comment.author.rank.includes('admin') ? '#cc3333' : (comment.author.rank.includes('moderator') ? '#00aa00' : '#1155dd'))) %>;"><%= comment.author.name %></span>: <%= comment.body %></div>
-                        <div><%= timeformatter.format(parseInt(comment.date), 'twitter') %></div>
-                    </div>
-                <% }) %>
             </div>
             <%if (user.rank.includes('user')) { %> 
             <form id="comment-form" class="center">
@@ -48,10 +42,12 @@
         </div>
     </section>
 
+    <script src="/js/darkmode.js"></script>
+    <script src="/js/get_post.js"></script>
     <%if (user.rank.includes('user')) { %> 
     <script src="/js/post_comment.js"></script>
     <% } %>
-    <script src="/js/darkmode.js"></script>
+    
 
 </body>
 </html>
