@@ -24,7 +24,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.google_clientSecret,
     callbackURL: "/auth/google/callback"
     }, (accessToken, refreshToken, profile, done) => {
-        Profile.findOne({googleId: profile.id}).then((existingProfile) => {
+        Profile.findOne({email: profile._json.email}).then((existingProfile) => {
             if(existingProfile) {                                                // existing profile
                 done(null, existingProfile);
             } else if (JSON.parse(blacklist).includes(profile._json.email)) {    // blacklisted profile                                                     // blacklist
