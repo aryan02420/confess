@@ -7,9 +7,11 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth_routes');
 const apiRoutes = require('./routes/api_routes');
 const postRoutes = require('./routes/post_routes');
+const adminRoutes = require('./routes/admin_routes');
 const passport = require('passport');
 require('./services/passport_setup');
 const cookieSession = require('cookie-session');
+const flash = require('connect-flash');
 require('./services/mongoose_setup');
 if (!(process.env.NODE_ENV === "production")) {
     require('dotenv').config();
@@ -17,12 +19,11 @@ if (!(process.env.NODE_ENV === "production")) {
 const {allow, deny} = require('./services/privileges');
 const slowDown = require("express-slow-down");
 const port = process.env.PORT;
-
+        
 
 app.enable('trust proxy');
 // redirect to https
 app.use ((req, res, next) => {
-    console.log(req.host)
     if (req.secure || req.hostname === 'localhost') {
         next();
     } else {
@@ -50,6 +51,7 @@ app.use(cookieSession({
     httpOnly: true,
     sameSite: 'lax'
 }));
+app.use(flash());
 
 // Update a value in the cookie so that the set-cookie will be sent.
 // Only changes every minute so that it's not sent with every request.
@@ -62,27 +64,34 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-const speedLimiter = slowDown({
+const apiSpeedLimiter = slowDown({
     windowMs: 1 * 60 * 1000, // 1 minutes
-    delayAfter: 20, // allow 30 requests to go at full-speed, then...
+    delayAfter: 30, // allow 30 requests to go at full-speed, then...
     delayMs: 2000 // 21st request has a 2s delay, 22nd has a 3s delay, 23rd gets 4s, etc.
+});
+
+const authSpeedLimiter = slowDown({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    delayAfter: 5, // allow 5 requests to go at full-speed, then...
+    delayMs: 2000 // 21st request has a 2s delay, 22nd has a 4s delay, 23rd gets 6s, etc.
 });
 
 
 app.get('/', (req, res) => {
-    res.render('home', { user: req.user });
+    res.render('home', { user: req.user, message: req.flash('info') });
 });
-app.use('/auth', authRoutes);
+app.use('/auth', authSpeedLimiter, authRoutes);
 app.use('/posts', postRoutes);
+app.use('/admin', allow(['admin']), adminRoutes);
 app.use('/chat', (req, res) => {
     res.render('chat');
 });
 app.use('/faq', (req, res) => {
     res.render('faq');
 });
-app.use('/api', speedLimiter, apiRoutes);
+app.use('/api', apiSpeedLimiter, apiRoutes);
 
-app.use(speedLimiter, (req, res) => {
+app.use(apiSpeedLimiter, (req, res) => {
     res.status(404).render('404');
 });
 

@@ -158,9 +158,12 @@ nav {
   gap: 30px;
 }
 
-#posts>img {
+#posts>a>img {
   width: 100%;
-  cursor: pointer;
+}
+
+#posts>a {
+  display: block;
 }
 
 h1 {

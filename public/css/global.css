@@ -2,7 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities"; */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
 
 * {
   margin: 0;
@@ -40,7 +40,7 @@ body {
   color: var(--text-color);
 }
 
-.soft, .p5Canvas, #posts>img, #post_img {
+.soft, .p5Canvas, #posts>a>img, #post_img {
   display: block;
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
@@ -96,7 +96,7 @@ a {
   margin: 10px;
 }
 
-.p5Canvas, #posts>img, #post_img{
+.p5Canvas, #posts>a>img, #post_img{
   margin: 0;
   padding: 3px;
   box-shadow:  5px 5px 15px var(--neo-bg-color-dark),
@@ -117,4 +117,16 @@ a {
 
 .op {
   text-decoration: underline;
+}
+
+.you {
+  font-style: italic;
+}
+
+.loading {
+  cursor: wait;
+}
+
+.disabled {
+  cursor: not-allowed;
 }

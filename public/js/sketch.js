@@ -31,8 +31,7 @@ function setup() {
   let canvas = createCanvas(canvasWidth, canvasHeight);
   pc = createGraphics(canvasWidth,canvasHeight);
   canvas.parent('preview');
-  // canvas.drop(userImage);
-  //colorMode(HSB, 360, 100, 100 ,1);
+  canvas.drop(userImage);
 
   bgColor = select('#bgcolor');
   fgColor = select('#fgcolor');
@@ -46,24 +45,35 @@ function setup() {
   signature.input(change);
   bgColor.input(change);
   fgColor.input(change);
-
-  change();
   
+  change();
 }
 
 
-function change() {
-  
+function draw() {
+
+  image(pc, 0, 0);
+  if (img) { 
+    tint(fgColor.value());
+    image(img, 0, canvasHeight-imgH, imgW, imgH);
+    // pc.blend(0, canvasHeight-imgH, imgW, imgH, 0, canvasHeight-imgH, imgW, imgH, BLEND);
+  }
+  noLoop();
+
+}
+
+function change() {  
+
   document.documentElement.style.setProperty('--fgcolor', document.querySelector('input[id="fgcolor"]').value);
   document.documentElement.style.setProperty('--bgcolor', document.querySelector('input[id="bgcolor"]').value);
 
   pc.background(bgColor.value());
   
-  // if (img) { 
-  //   tint(100);
-  //   image(img, 0, canvasHeight-imgH, imgW, imgH);
-  //   //blend(0, canvasHeight-imgH, imgW, imgH, 0, canvasHeight-imgH, imgW, imgH, MULTIPLY);
-  // }
+  if (img) { 
+    tint(fgColor.value());
+    image(img, 0, canvasHeight-imgH, imgW, imgH);
+    // pc.blend(0, canvasHeight-imgH, imgW, imgH, 0, canvasHeight-imgH, imgW, imgH, BLEND);
+  }
   
   pc.fill(fgColor.value());
   
@@ -99,35 +109,35 @@ function change() {
   // pc.rect(paddingSide, canvasHeight - 1.6 * paddingTop, canvasWidth - 2 * paddingSide, fs2)
   // pc.rect(paddingSide, canvasHeight - 1.5 * paddingTop + fs2, canvasWidth - 2 * paddingSide, fs3)
 
-  image(pc, 0, 0);
-
+  draw();
 }
 
 function canvasDataURL() {
-
   canvasToImg.value(canvas.toDataURL("image/jpeg"));
   resizeCanvas(canvasWidth/scl, canvasWidth/scl);
   image(pc, 0, 0, canvasWidth/scl, canvasWidth/scl, 0, (canvasHeight-canvasWidth)/2, canvasWidth, canvasWidth);
   canvasToThumb.value(canvas.toDataURL("image/jpeg", 0.6));
   resizeCanvas(canvasWidth, canvasHeight);
-  setup();
-
 }
 
-// function userImage(file) {
-//   if (file.type === 'image') {
-//     img = createImg(file.data).hide();
-//     imgW = img.width;
-//     imgH = img.height;
-//     let tw = canvasWidth*0.4;
-//     let th = canvasWidth*0.4;
-//     let sw = tw/imgW;
-//     let sh = th/imgH;
-//     let s = min(sw,sh);
-//     imgW*=s;
-//     imgH*=s;
-//     change();
-//   }
-// }
+function userImage(file) {
+  if (file.type === 'image') {
+    img = createImg(file.data, 'usr-img').hide();
+    imgW = img.width;
+    imgH = img.height;
+    console.log(imgH)
+    let tw = canvasWidth*0.4;
+    let th = canvasWidth*0.4;
+    let sw = tw/imgW;
+    let sh = th/imgH;
+    let s = min(sw,sh);
+    imgW*=s;
+    imgH*=s;
+    console.log(imgH)
+    imgW = parseInt(imgW);
+    imgH = parseInt(imgH);
+    change();
+  }
+}
 
 

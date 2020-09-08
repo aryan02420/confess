@@ -1,6 +1,6 @@
 const form = document.querySelector('#comment-form');
 const error = document.querySelectorAll('.error')[1];
-const API_URL2 = '/api/comment';
+const API_URL2 = '/api/vote';
 
 error.style.display = 'none';
 

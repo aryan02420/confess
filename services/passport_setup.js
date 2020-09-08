@@ -24,25 +24,39 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.google_clientSecret,
     callbackURL: "/auth/google/callback"
     }, (accessToken, refreshToken, profile, done) => {
-        Profile.findOne({email: profile._json.email}).then((existingProfile) => {
+
+        if (JSON.parse(blacklist).includes(profile._json.email)) {    // blacklist
+            return done(null, false, { message: 'Banned!' });
+        }
+
+        if (!profile._json.email.endsWith('bits-pilani.ac.in')) {     // non bits email
+            return done(null, false, { message: 'Must use BITS email' });
+        }  
+
+        Profile.findOne({googleId: profile.id}).then((existingProfile) => {
+
             if(existingProfile) {                                                // existing profile
-                done(null, existingProfile);
-            } else if (JSON.parse(blacklist).includes(profile._json.email)) {    // blacklisted profile                                                     // blacklist
-                done(null, false);
-            } else if (!profile._json.email.endsWith('bits-pilani.ac.in')) {     // non bits email
-                done(null, false);
-            } else {                                                             // new bits email
+                if (existingProfile.rank.includes('ban')) {                      // if banned user
+                    return done(null, false, { message: 'Banned!' });
+                }
+                return done(null, existingProfile);
+            }                                                   
+            
+            // new bits email
+            Promise.all([
+                Profile.countDocuments({})
+            ]).then(([count]) => {
                 new Profile({
-                    email: profile._json.email,
-                    // googleId: profile.id,
-                    name: 'Anon',
+                    // email: profile._json.email,
+                    googleId: profile.id,
                     rank: ['user'],
-                    created: new Date()
-                    // hashedId: bcrypt.hashSync(profile._json.email, '/'+profile.id.toString())
+                    created: new Date(),
+                    index: count
                 }).save().then((newProfile) => {
-                    done(null, newProfile);
+                    return done(null, newProfile);
                 });
-            }
+            });
+
         });
     })
 );
@@ -52,9 +66,6 @@ passport.use(new LocalStrategy(
         if (username.toString() === 'guest' && password.toString() === 'guest') {
             Profile.findById(process.env.guestId).then((guestProfile) => {
                 done(null, guestProfile);
-            }).catch((err) => {
-                res.status(422);
-                res.json({message: err});
             });
         } else {
             done(null, false);

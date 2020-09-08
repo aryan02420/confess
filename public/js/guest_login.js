@@ -9,7 +9,10 @@ document.querySelector('#guest-signin')
         method: 'POST',
         body: formData,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).then(response => {})
-    .then(data => window.location.replace('/'))
+    }).then(response => {
+        return response.json()
+    }).then( data => {
+        location.href = data.redirectTo || ''
+    })
     .catch(error => console.log(error))
 });

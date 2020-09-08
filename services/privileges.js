@@ -3,7 +3,8 @@ const allow = (rank) => {
         if (!req.user) {
             // save current url to be use later after authenticated
             req.session.redirectTo = req.originalUrl.toString();
-            res.redirect('/auth/google');
+            req.flash('info', `Sign in to access ${req.originalUrl.toString()}`)
+            res.redirect('/');
         } else if (JSON.stringify(rank.filter(value => req.user.rank.includes(value)))=='[]') {
             res.status(401).render('401');
         } else {

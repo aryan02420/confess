@@ -42,10 +42,12 @@ function getPosts(reset=true,limit=6) {
         data.posts.forEach(post => {
             let q = document.querySelector(`img[data-id="${post._id}"]`);
             if (q) {return}
+            const a = document.createElement('a');
+            a.setAttribute('href',`/posts/${post.code}`);
             const img = document.createElement('img');
             img.setAttribute('src',post.thumbnail);
-            img.setAttribute('data-id',post._id);
-            postsElem.appendChild(img);
+            a.appendChild(img);
+            postsElem.appendChild(a);
         })
         if (!data.info.has_more) {
             finished = true;

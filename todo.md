@@ -1,12 +1,23 @@
-[ ] Upvote / Downvote
+[-] Upvote / Downvote
 [ ] Server-Side-Caching
-[ ] PWA
+[-] PWA
     [x] manifest
-    [ ] service worker
-    [ ] caching
+    [x] service worker
+    [x] caching
     [ ] indexedDB
-[ ] Delete posts and comments
-[ ] Delete Users
-[ ] Give user ranks
+    [ ] offline page
+[ ] admin panel
+    [ ] Delete posts and comments
+    [ ] Delete Users
+    [ ] Give user ranks
 [ ] chat
 [ ] loading icon
+[ ] faq
+    [ ] privacy
+    [ ] new account request
+    [ ] contact
+[ ] search posts
+[x] random usernames
+[x] make blacklist as rank
+[x] redirect after login
+[-] flash messages

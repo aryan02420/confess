@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@aryan02420/usernamegen": "0.0.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "ejs": "^3.1.3",
@@ -29,7 +31,8 @@
   },
   "scripts": {
     "test": "clear && nodemon express.js",
-    "start": "NODE_ENV=production && node express.js"
+    "start": "NODE_ENV=production && node express.js",
+    "scrape": "node ./scraper/index.js"
   },
   "keywords": [],
   "author": "",

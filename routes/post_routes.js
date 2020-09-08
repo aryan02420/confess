@@ -11,16 +11,11 @@ router.get('/new', allow(['user']), (req, res) => {
     res.render('editor');
 });
 
-router.get('/:post_id', allow(['guest', 'user']), (req, res) => {
-    const post_id = req.params.post_id.toString().trim();
-    if (/^[a-f0-9]{24}$/.test(post_id)) {
-        Post.findById(post_id).populate('author', 'name rank color').populate('comments.author', 'name rank color').select('author.name author.rank time image comments').then((post) => {
-            res.status(200);
-            res.render('post', { user: req.user });
-        }).catch((err) => {
-            res.status(422);
-            res.json({message: err});
-        });
+router.get('/:code', allow(['guest', 'user']), (req, res) => {
+    const code = req.params.code.toString().trim();
+    if (/^[a-z0-9A-Z]{7}$/.test(code)) {
+        res.status(200);
+        res.render('post', { user: req.user });
     } else {
         res.status(422);
         res.json({message: 'Post Not Found'});

@@ -4,11 +4,10 @@ const time = document.querySelector('#time');
 const post_img = document.querySelector('#post_img');
 const comments = document.querySelector('#comments');
 const API_URL1 = '/api/post';
-const id = location.pathname.match( /([0-9a-f]{24})/ )[0];
-
+const id = location.pathname.match( /([0-9a-zA-Z]{7})/ )[0];
 errorElem.style.display = 'none';
 
-fetch(API_URL1+'?post_id='+id.toString())
+fetch(API_URL1+'?c='+id.toString())
 .then((response) => {
     if (!response.ok) {
         const contentType = response.headers.get('content-type');
@@ -33,9 +32,12 @@ fetch(API_URL1+'?post_id='+id.toString())
         if (comment.author.rank.includes('op')) {
             nam.classList.add('op');
         }
+        if (comment.author.rank.includes('you')) {
+            nam.classList.add('you');
+        }
 
         const cont = document.createElement('span');
-        cont.innerText = ": " + comment.body;
+        cont.innerText = " : " + comment.body;
 
         const body = document.createElement('div');
         body.appendChild(nam);

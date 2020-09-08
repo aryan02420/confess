@@ -7,11 +7,14 @@ const postSchema = new Schema({
         type :Schema.Types.ObjectId,
         ref: Profile
     },
+    alias: String,
     image: String,
     thumbnail: String,
     maintext: String,
     signature: String,
     time: String,
+    code: String,
+    index: Number,
     votes: {
         upvotes: [String],
         downvotes: [String],
@@ -21,6 +24,7 @@ const postSchema = new Schema({
             type :Schema.Types.ObjectId,
             ref: Profile
         },
+        alias: String,
         body: String,
         date: String 
     }]
