@@ -1,4 +1,4 @@
-const staticCache = 'sc-3';
+const staticCache = 'sc-4';
 const dynamicCache = 'dc-1';
 const cachedFiles = [
     '/css/style.css',
