@@ -21,7 +21,7 @@ const slowDown = require("express-slow-down");
 const port = process.env.PORT;
         
 
-app.enable('trust proxy');
+app.enable('trust proxy', 'localhost');
 // redirect to https
 app.use ((req, res, next) => {
     if (req.secure || req.hostname === 'localhost') {
@@ -78,7 +78,7 @@ const authSpeedLimiter = slowDown({
 
 
 app.get('/', (req, res) => {
-    res.render('home', { user: req.user, message: req.flash('info') });
+    res.render('home', { user: req.user, message: req.flash('error') });
 });
 app.use('/auth', authSpeedLimiter, authRoutes);
 app.use('/posts', postRoutes);

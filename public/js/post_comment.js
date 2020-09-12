@@ -14,13 +14,9 @@ form.addEventListener('submit', (event) => {
     const comment = {
         text,
         code
-    };
-
-    console.log(JSON.stringify(comment),);
-    
+    };    
 
     const isValidComment = (comment) => {
-        return true
         return comment && comment.toString().trim() !== '' && comment.toString().trim().length <= 200;
     }
 

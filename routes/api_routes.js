@@ -59,10 +59,10 @@ const getPost = (req, res) => {
             post.author.name = post.author.name || post.alias;
             delete post.author._id;
             delete post.alias;
-            if (post.votes.upvotes.includes(req.user._id)) {
-                post.voted = 'up';
-            } else if (post.votes.downvotes.includes(req.user._id)) {
-                post.voted = 'down';
+            if (post.votes.upvotes.includes(req.user._id.toString())) {
+                post.voted = 'UP';
+            } else if (post.votes.downvotes.includes(req.user._id.toString())) {
+                post.voted = 'DOWN';
             } else {
                 post.voted = '';
             }
@@ -158,21 +158,64 @@ const addComment = (req, res) => {
 
 router.post('/comment', allow(['user']), addComment);
 
+const isValidVote = (data, reqheader) => {
+    return data.vote && (data.vote.toString().trim() === 'UP' || 'DOWN' || 'UNVOTE') &&
+           data.code && data.code.toString().trim() && /^[a-z0-9A-Z]{7}$/.test(data.code.toString().trim()) &&
+           data.code.toString().trim() === reqheader.match( /\/posts\/([0-9a-zA-Z]{7})/ )[1];
+}
+
 const addVote = (req, res) => {
     
-    if (true) {
-        console.log('voted')
+    if (isValidVote(req.body, req.headers.referer.toString().trim())) {
+        // , 
         let vote = req.body.vote.toString().trim();
         let code = req.body.code;
-        Post.findOneAndUpdate({code: code}, {$push: {'votes.upvote':req.user._id}}, (error, success) => {
+        const uid = req.user._id.toString();
+        console.log(vote)
+        Promise.all([Post.findOneAndUpdate({code: code}, {$pull: {'votes.downvotes': uid}} , (error, success) => {
             if (error) {
                 res.status(422);
-                res.json({message: 'Invalid Inputs'});
+                res.json({message: 'Invalid-Inputs'});
+            }
+            console.log('removed')
+        }),Post.findOneAndUpdate({code: code}, {$pull: {'votes.upvotes': uid}} , (error, success) => {
+            if (error) {
+                res.status(422);
+                res.json({message: 'Invalid-Inputs'});
+            }
+            console.log('removed')
+        })]).then(() => {
+            if (vote === 'UP') {
+                Post.findOneAndUpdate({code: code}, {$push: {'votes.upvotes': uid}} , (error, success) => {
+                    if (error) {
+                        res.status(422);
+                        res.json({message: 'Invalid-Inputs'});
+                    } else {
+                        res.status(200);
+                        res.json({message:'ok'});
+                    }
+                });
+                console.log('UPPED')
+            } else if (vote === 'DOWN') {
+                Post.findOneAndUpdate({code: code}, {$push: {'votes.downvotes': uid}} , (error, success) => {
+                    if (error) {
+                        res.status(422);
+                        res.json({message: 'Invalid-Inputs'});
+                    } else {
+                        res.status(200);
+                        res.json({message:'ok'});
+                    }
+                });
+                console.log('DOWNED')
             } else {
                 res.status(200);
                 res.json({message:'ok'});
             }
+        }).catch((err) => {
+            res.status(422);
+            res.json(err);
         });
+
     } else {
         res.status(422);
         res.json({message: 'Invalid Inputs'});

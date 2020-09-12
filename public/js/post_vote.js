@@ -1,33 +1,45 @@
-const form = document.querySelector('#comment-form');
-const error = document.querySelectorAll('.error')[1];
-const API_URL2 = '/api/vote';
+const API_URL3 = '/api/vote';
+const up = document.querySelector('#upvote');
+const down = document.querySelector('#downvote');
+
+let vote = '';
+const code = location.pathname.match( /([0-9a-zA-Z]{7})/ )[0];
 
 error.style.display = 'none';
 
-form.addEventListener('submit', (event) => {
+up.addEventListener('click', (event) => {
 
     event.preventDefault();
-    const formData = new FormData(form);
-    const text = formData.get('comment').toString().trim();
-    const code = location.pathname.match( /([0-9a-zA-Z]{7})/ )[0]
+    vote = up.classList.contains('soft-inv') ? 'UNVOTE' : 'UP';
+    Vote();
 
-    const comment = {
-        text,
+});
+
+down.addEventListener('click', (event) => {
+
+    event.preventDefault();
+    vote = down.classList.contains('soft-inv') ? 'UNVOTE' : 'DOWN';
+    Vote();
+
+});
+
+const Vote = () => {
+
+    const data = {
+        vote,
         code
     };
-
-    console.log(JSON.stringify(comment),);
     
 
-    const isValidComment = (comment) => {
-        return true
-        return comment && comment.toString().trim() !== '' && comment.toString().trim().length <= 200;
+    const isValidVote = (data) => {
+        return data.vote && (data.vote.toString().trim() === 'UP' || 'DOWN' || 'UNVOTE') &&
+        data.code && data.code.toString().trim() === location.pathname.match( /([0-9a-zA-Z]{7})/ )[0];
     }
 
-    if(isValidComment(comment)) {
-        fetch(API_URL2, {
+    if(isValidVote(data)) {
+        fetch(API_URL3, {
             method: 'POST',
-            body: JSON.stringify(comment),
+            body: JSON.stringify(data),
             headers: {'content-type': 'application/json'}
         }).then(response => { 
             if (!response.ok) {
@@ -39,7 +51,6 @@ form.addEventListener('submit', (event) => {
                 }
             }
         }).then(() => {
-            form.reset();
             location.reload();
         }).catch(errorMessage => {
             error.textContent = errorMessage;
@@ -47,9 +58,9 @@ form.addEventListener('submit', (event) => {
             setTimeout(() => error.style.display = 'none', 3000);
         });
     } else {
-        error.textContent = 'Invalid Inputs';
+        error.textContent = 'Error! cannot vote';
         error.style.display = '';
         setTimeout(() => error.style.display = 'none', 3000);
-    }
+    }}
 
-});
+

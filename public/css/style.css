@@ -196,7 +196,7 @@ h1 {
 }
 
 .user-comment>*:first-child {
-  width: 100%;
+  width: auto;
 }
 
 .user-comment>*:last-child, .post-info>*:last-child {

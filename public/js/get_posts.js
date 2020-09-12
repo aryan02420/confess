@@ -40,7 +40,7 @@ function getPosts(reset=true,limit=6) {
         }
     }).then((data) => {
         data.posts.forEach(post => {
-            let q = document.querySelector(`img[data-id="${post._id}"]`);
+            let q = document.querySelector(`a[href="${post._id}"]`);
             if (q) {return}
             const a = document.createElement('a');
             a.setAttribute('href',`/posts/${post.code}`);

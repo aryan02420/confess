@@ -1,4 +1,4 @@
-[-] Upvote / Downvote
+[x] Upvote / Downvote
 [ ] Server-Side-Caching
 [-] PWA
     [x] manifest
@@ -20,4 +20,4 @@
 [x] random usernames
 [x] make blacklist as rank
 [x] redirect after login
-[-] flash messages
+[x] flash messages
