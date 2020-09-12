@@ -7,6 +7,7 @@ if (!(process.env.NODE_ENV === "production")) {
 }
 const bcrypt = require('bcrypt');
 const blacklist = require('./blacklist');
+const whitelist = require('./whitelist');
 
 
 passport.serializeUser((currentProfile, done) => {
@@ -29,7 +30,7 @@ passport.use(new GoogleStrategy({
             return done(null, false, { message: 'Banned!' });
         }
 
-        if (!profile._json.email.endsWith('bits-pilani.ac.in')) {     // non bits email
+        if (!profile._json.email.endsWith('bits-pilani.ac.in') && !JSON.parse(whitelist).includes(profile._json.email)) {     // non bits email and not in whitelist
             return done(null, false, { message: 'Must use BITS email' });
         }  
 
