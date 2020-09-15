@@ -34,7 +34,12 @@ passport.use(new GoogleStrategy({
             return done(null, false, { message: 'Must use BITS email' });
         }  
 
-        Profile.findOne({googleId: profile.id}).then((existingProfile) => {
+        Profile.findOne({
+            $and: [
+                { googleId: profile.id },
+                { rank: { $not: { $elemMatch: { $eq: "deleted" } } } }
+            ]
+        }).then((existingProfile) => {
 
             if(existingProfile) {                                                // existing profile
                 if (existingProfile.rank.includes('ban')) {                      // if banned user

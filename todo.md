@@ -8,7 +8,7 @@
     [ ] offline page
 [ ] admin panel
     [ ] Delete posts and comments
-    [ ] Delete Users
+    [-] Delete Users
     [ ] Give user ranks
 [ ] chat
 [ ] loading icon
