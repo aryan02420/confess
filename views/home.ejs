@@ -12,7 +12,7 @@
         </div>
         <a href="/faq"><div class="soft square">?</div></a>
     </div>
-    <div class="center flex-column" style="height:100vh;">
+    <div class="center flex-column" style="height:auto;position:absolute;bottom:10px;left:0;right:0;">
         <% if (!user) { %>
             <a class="soft" href="/auth/google">Sign in with BITS Mail</a>
             <a class="soft" id="guest-signin" href="#">Continue as Guest</a>
@@ -28,10 +28,17 @@
             <!-- <a class="soft" href="/chat">Chat</a> -->
             <a class="soft" href="/auth/logout">Logout</a>   
         <% } else { %>
-            <p>Easter Egg: You are not supposed to see this. H4CK3RM4N</p>
+            <p>H4CK3RM4N</p>
         <% } %>
     </div>
-
+    <svg
+        style="z-index: -99; position: absolute; left: 50%; top: 20%; transform: rotate(-15deg) translate(-50%,-50%); width: 70%;"
+        viewBox="0 0 52.91063 32.56096" style="width:50%;">
+        <path
+            transform="translate(-106.36561,-126.18611)"
+            d="m 145.22425,126.18614 c -0.14593,-10e-4 -0.29103,0.022 -0.42943,0.0682 l -13.36456,4.4545 c -0.80366,0.26801 -1.68087,0.20574 -2.43861,-0.17311 l -8.21655,-4.10828 c -0.62464,-0.31253 -1.38126,8.5e-4 -1.60197,0.66353 l -4.45451,13.36456 c -0.20594,0.61739 0.2535,1.2551 0.90434,1.25522 h 34.39583 c 0.65083,-1.2e-4 1.11028,-0.63783 0.90434,-1.25522 l -4.45451,-13.36456 c -0.17872,-0.53661 -0.6788,-0.90025 -1.24437,-0.90486 z m -12.89327,19.31975 c -1.14767,0.005 -2.27314,0.0296 -3.21892,0.0729 -0.27035,0.0124 -0.70867,0.0375 -0.97875,0.0548 -8.10394,0.51842 -15.5962,2.36772 -21.33049,5.21931 -0.24232,0.12051 -0.43718,0.44044 -0.43718,0.71107 V 153.63 c 0,0.27063 -0.002,0.71006 0.0243,0.97926 0.21868,2.20707 1.90638,3.89476 4.11344,4.11345 0.26921,0.0267 0.70864,0.0243 0.97927,0.0243 h 42.67647 c 0.27063,0 0.71006,0.002 0.97926,-0.0243 2.20707,-0.21869 3.89528,-1.90638 4.11396,-4.11345 0.0267,-0.26921 0.0238,-0.70863 0.0238,-0.97926 v -2.06603 c 0,-0.27063 -0.19486,-0.59056 -0.43718,-0.71107 -5.73429,-2.85159 -13.22655,-4.70089 -21.33048,-5.21931 -0.27008,-0.0173 -0.70841,-0.0424 -0.97875,-0.0548 -0.94579,-0.0433 -2.07125,-0.0675 -3.21893,-0.0729 -0.27063,-0.001 -0.70916,-0.001 -0.97978,0 z"
+            style="opacity:0.999;fill:var(--text-color);fill-opacity:0.05;stroke:none;stroke-width:6.365;stroke-opacity:1;paint-order:fill markers stroke" />
+    </svg>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {

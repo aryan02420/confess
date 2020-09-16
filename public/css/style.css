@@ -15,6 +15,10 @@ section {
   align-items: center;
 }
 
+.flex-end {
+  justify-content: end;
+}
+
 textarea,
 button,
 .upload {
@@ -251,6 +255,7 @@ h1 {
 
   .post-info {
     margin-bottom: -10px;
+    flex-direction: column;
   }
 }
 
