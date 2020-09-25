@@ -167,7 +167,7 @@ const isValidVote = (data, reqheader) => {
 const addVote = (req, res) => {
     
     if (isValidVote(req.body, req.headers.referer.toString().trim())) {
-        // , 
+
         let vote = req.body.vote.toString().trim();
         let code = req.body.code;
         const uid = req.user._id.toString();
@@ -177,13 +177,11 @@ const addVote = (req, res) => {
                 res.status(422);
                 res.json({message: 'Invalid-Inputs'});
             }
-            console.log('removed')
         }),Post.findOneAndUpdate({code: code}, {$pull: {'votes.upvotes': uid}} , (error, success) => {
             if (error) {
                 res.status(422);
                 res.json({message: 'Invalid-Inputs'});
             }
-            console.log('removed')
         })]).then(() => {
             if (vote === 'UP') {
                 Post.findOneAndUpdate({code: code}, {$push: {'votes.upvotes': uid}} , (error, success) => {
@@ -195,7 +193,6 @@ const addVote = (req, res) => {
                         res.json({message:'ok'});
                     }
                 });
-                console.log('UPPED')
             } else if (vote === 'DOWN') {
                 Post.findOneAndUpdate({code: code}, {$push: {'votes.downvotes': uid}} , (error, success) => {
                     if (error) {
@@ -206,7 +203,6 @@ const addVote = (req, res) => {
                         res.json({message:'ok'});
                     }
                 });
-                console.log('DOWNED')
             } else {
                 res.status(200);
                 res.json({message:'ok'});

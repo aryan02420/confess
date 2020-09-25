@@ -13,7 +13,10 @@ const postSchema = new Schema({
     maintext: String,
     signature: String,
     time: String,
-    code: String,
+    code: {
+        type: String,
+        unique: true
+    },
     index: Number,
     votes: {
         upvotes: [String],
