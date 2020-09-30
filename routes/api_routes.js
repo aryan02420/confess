@@ -39,7 +39,7 @@ router.get('/posts', allow(['guest','user']), getPosts);
 const getPost = (req, res) => {
     let { c = 'none' } = req.query;
     c = c.toString().trim();    
-    if (/^[a-zA-Z0-9]{7}$/.test(c)) {
+    if (/^(?:[a-zA-Z0-9]|\_|\-){7}$/.test(c)) {
         Post.findOne({code: c}).populate('author', 'name rank color').populate('comments.author', 'name rank color').select('author alias time image comments votes -_id').then((opost) => {
             let post = JSON.parse( JSON.stringify( opost ) );
             post.time = timeAgo.format(parseInt(post.time), 'twitter');

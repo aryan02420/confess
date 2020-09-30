@@ -13,7 +13,7 @@ router.get('/new', allow(['user']), (req, res) => {
 
 router.get('/:code', allow(['guest', 'user']), (req, res) => {
     const code = req.params.code.toString().trim();
-    if (/^[a-z0-9A-Z]{7}$/.test(code)) {
+    if (/^(?:[a-zA-Z0-9]|\_|\-){7}$/.test(code)) {
         res.status(200);
         res.render('post', { user: req.user });
     } else {
