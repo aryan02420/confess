@@ -23,9 +23,11 @@
     <div id="inputs" class="center">
       <form class="" id="post_form">
         <div class="flex-container">
-          <div>
+          <div class="flex-container">
             <input class="soft" type="color" id="fgcolor" value="#333333">
             <input class="soft" type="color" id="bgcolor" value="#ffdd00">
+            <button class="soft square" name="random" id="random" onclick="event.preventDefault();init();">R</button>
+            <button class="soft square" name="swap" id="swap" onclick="event.preventDefault();swapCol();">S</button>
           </div>
           <div>
             <button class="soft" name="confess" id="submit">POST</button>

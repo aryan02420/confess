@@ -30,6 +30,14 @@ function hslToRgb(h, s, l) {
 function init() {
   document.querySelector('input[id="bgcolor"]').value = hslToRgb(rand(0, 360) / 360, rand(40, 60) / 100, rand(80, 90) / 100);
   document.querySelector('input[id="fgcolor"]').value = hslToRgb(rand(0, 360) / 360, rand(80, 100) / 100, rand(20, 30) / 100);
+  change();
+}
+
+function swapCol() {
+  let tmp = document.querySelector('input[id="bgcolor"]').value;
+  document.querySelector('input[id="bgcolor"]').value = document.querySelector('input[id="fgcolor"]').value;
+  document.querySelector('input[id="fgcolor"]').value = tmp;
+  change();
 }
 
 init();
