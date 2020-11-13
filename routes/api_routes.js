@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Profile = require('../models/profiles');
 const Post = require('../models/posts');
 const {allow, deny} = require('../services/privileges');
+const newConfession =require('../services/discordjs');
 
 const TimeAgo = require("javascript-time-ago");
 const en = require("javascript-time-ago/locale/en");
@@ -105,9 +106,10 @@ const addPost = (req, res) => {
             Post.countDocuments({})
         ]).then(([count]) => {
             let code = dto64(parseInt(req.body.time)-1594000000000);
+            const alias = ung.generateUsername(`${code}${req.user._id}`);
             new Post({
                 author: req.user._id,
-                alias: ung.generateUsername(`${code}${req.user._id}`),
+                alias: alias,
                 image: req.body.image.toString().trim(),
                 thumbnail: req.body.thumb.toString().trim(),
                 maintext: req.body.maintext.toString().replace(/((?:^.{37}))(.+)/gm, '$1\r\n$2').replace(/^\s+/gm,'').replace(/(^(?:[^\r\n]*[\r\n]){17}[^\r\n]*)[\r\n].*/gm, '$1').replace(/\s+/gm,' ').trim(),
@@ -116,6 +118,9 @@ const addPost = (req, res) => {
                 code: code.toString(),
                 index: parseInt(count)
             }).save();
+            return {name:req.user.name || alias, color:req.user.color || '#1155dd', img:req.body.image.toString().trim(), url:`https://localhost:3000/posts/${code}`}
+        }).then((embed) => {
+            newConfession(embed.name, embed.color, embed.img, embed.url);
         });
 
         res.status(200);
