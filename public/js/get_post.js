@@ -24,24 +24,26 @@ fetch(API_URL1+'?c='+id.toString())
         return response.json();
     }
 }).then((data) => {
-    name.innerText = data.author.name;
-    if (data.author.rank.includes('admin')) name.innerHTML += SHIELD_A;
-    else if (data.author.rank.includes('moderator')) name.innerHTML += SHIELD_M;
-    if (data.author.rank.includes('patreon')) name.innerHTML += MEDAL;
-    if (data.author.rank.includes('deleted')) {
+    post = data.post;
+    comms = data.comments;
+    name.innerText = post.author.name;
+    if (post.author.rank.includes('admin')) name.innerHTML += SHIELD_A;
+    else if (post.author.rank.includes('moderator')) name.innerHTML += SHIELD_M;
+    if (post.author.rank.includes('patreon')) name.innerHTML += MEDAL;
+    if (post.author.rank.includes('deleted')) {
         name.classList.add('deleted');
     }
-    name.style.color = data.author.color || ((data.author.rank.includes('admin') ? '#cc3333' : (data.author.rank.includes('moderator') ? '#00aa00' : '#1155dd')));
-    name.style.fill = data.author.color || ((data.author.rank.includes('admin') ? '#cc3333' : (data.author.rank.includes('moderator') ? '#00aa00' : '#1155dd')));
-    time.innerText = data.time;
-    document.querySelector('#votecount').innerText = data.votes;
-    if (data.voted === 'UP') {
+    name.style.color = post.author.color || ((post.author.rank.includes('admin') ? '#cc3333' : (post.author.rank.includes('moderator') ? '#00aa00' : '#1155dd')));
+    name.style.fill = post.author.color || ((post.author.rank.includes('admin') ? '#cc3333' : (post.author.rank.includes('moderator') ? '#00aa00' : '#1155dd')));
+    time.innerText = post.time;
+    document.querySelector('#votecount').innerText = post.votes;
+    if (post.voted === 'UP') {
         document.querySelector('#upvote').classList.add('soft-inv')
-    } else if (data.voted === 'DOWN') {
+    } else if (post.voted === 'DOWN') {
         document.querySelector('#downvote').classList.add('soft-inv')
     }
-    post_img.src = data.image;
-    data.comments.reverse().forEach((comment) => {
+    post_img.src = `/img/${post.code}`;
+    comms.reverse().forEach((comment) => {
 
         const nam = document.createElement('span');
         nam.style.color = comment.author.color || ((comment.author.rank.includes('admin') ? '#cc3333' : (comment.author.rank.includes('moderator') ? '#00aa00' : '#1155dd')));

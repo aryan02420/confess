@@ -11,16 +11,13 @@ const commentSchema = new Schema({
     alias: String,
     body: String,
     date: String,
-    post: {
-        type :Schema.Types.ObjectId,
-        ref: Post
-    },
-    repliedTo: {
-        type :Schema.Types.ObjectId,
-        ref: Comment
-    }
+    post_code: String,
+    // repliedTo: {
+    //     type :Schema.Types.ObjectId,
+    //     ref: Comment
+    // }
 });
 
-const Comment = mongoose.model('post', commentSchema);
+const Comment = mongoose.model('comment', commentSchema);
 
 module.exports = Comment;

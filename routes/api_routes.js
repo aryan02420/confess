@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Profile = require('../models/profiles');
 const Post = require('../models/posts');
+const Comment = require('../models/comments');
 const {allow, deny} = require('../services/privileges');
 const newConfession =require('../services/discordjs');
 
@@ -19,7 +20,7 @@ const getPosts = (req, res) => {
     skip = skip < 0 ? 0 : skip;
     limit = Math.min(12, Math.max(1, limit));
     Promise.all([
-        Post.find({}).sort({time: -1}).skip(skip).limit(limit).select('thumbnail code -_id'),
+        Post.find({}).sort({time: -1}).skip(skip).limit(limit).select('code -_id').lean(),
         Post.countDocuments({})
     ]).then(([posts, total]) => {
         res.status(200);
@@ -41,10 +42,12 @@ const getPost = (req, res) => {
     let { c = 'none' } = req.query;
     c = c.toString().trim();    
     if (/^(?:[a-zA-Z0-9]|\_|\-){7}$/.test(c)) {
-        Post.findOne({code: c}).populate('author', 'name rank color').populate('comments.author', 'name rank color').select('author alias time image comments votes -_id').then((opost) => {
-            let post = JSON.parse( JSON.stringify( opost ) );
+        Promise.all([
+            Post.findOne({code: c}).populate('author', 'name rank color').select('author alias time code votes -_id').lean(),
+            Comment.find({post_code: c}).sort({date: 1}).populate('author', 'name rank color').select('author alias body date').lean()
+        ]).then(([post, comments]) => {
             post.time = timeAgo.format(parseInt(post.time), 'twitter');
-            post.comments.forEach(comment => {
+            comments.forEach(comment => {
                 if (comment.author._id.toString()===post.author._id.toString()) {
                     comment.author.rank.push('op');
                 }
@@ -69,8 +72,9 @@ const getPost = (req, res) => {
             }
             post.votes = post.votes.upvotes.length - post.votes.downvotes.length;
             res.status(200);
-            res.json(post);
-        }).catch(() => {
+            res.json({post, comments});
+        }).catch((err) => {
+            console.log(err);
             res.status(422);
             res.json({message: 'Post Not Found1'});
         });
@@ -145,15 +149,25 @@ const addComment = (req, res) => {
     if (isValidComment(req.body, req.headers.referer.toString().trim())) {
         let code = req.body.code;
         let comment = {author:req.user._id, alias:ung.generateUsername(`${code}${req.user._id}`), body:req.body.text.toString().trim(), date: Date.now()};
-        Post.findOneAndUpdate({code: code}, {$push: {comments:comment}}, (error, success) => {
-            if (error) {
-                res.status(422);
-                res.json({message: 'Invalid Inputs'});
-            } else {
-                res.status(200);
-                res.json({message:'ok'});
-            }
-        });
+        // Post.findOneAndUpdate({code: code}, {$push: {comments:comment}}, (error, success) => {
+        //     if (error) {
+        //         res.status(422);
+        //         res.json({message: 'Invalid Inputs'});
+        //     } else {
+        //         res.status(200);
+        //         res.json({message:'ok'});
+        //     }
+        // });
+        const alias = ung.generateUsername(`${code}${req.user._id}`);
+        new Comment({
+            author: req.user._id,
+            alias: alias,
+            body:req.body.text.toString().trim(),
+            date: Date.now(),
+            post_code: code.toString().trim(),
+        }).save();
+        res.status(200);
+        res.json({message:'all ok'});
     } else {
         res.status(422);
         res.json({message: 'Invalid Inputs'});
@@ -176,7 +190,6 @@ const addVote = (req, res) => {
         let vote = req.body.vote.toString().trim();
         let code = req.body.code;
         const uid = req.user._id.toString();
-        console.log(vote)
         Promise.all([Post.findOneAndUpdate({code: code}, {$pull: {'votes.downvotes': uid}} , (error, success) => {
             if (error) {
                 res.status(422);

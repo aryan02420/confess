@@ -8,7 +8,7 @@ function isValidData(data) {
     const delay = ( parseInt(Number(Date.now())) - parseInt(Number(data.time.toString().trim())) );
     const mt = data.maintext && data.maintext.toString().trim() !== '' && data.maintext.toString().trim().length <= 683;
     const si = data.sign && data.sign.toString().trim() !== '' && data.sign.toString().trim().length <= 24;
-    const ti = data.time && data.time.toString().trim() !== '' && delay >= 0 && delay <= 200;
+    const ti = data.time && data.time.toString().trim() !== '' && delay >= 0 && delay <= 500;
     const im = data.image && data.image.toString().trim() !== '' && data.image.toString().trim().startsWith("data:image/jpeg;base64,");
     const th = data.thumb && data.thumb.toString().trim() !== '' && data.thumb.toString().trim().startsWith("data:image/jpeg;base64,");
     return mt && si && ti && im && th;

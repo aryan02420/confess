@@ -45,7 +45,7 @@ function getPosts(reset=true,limit=6) {
             const a = document.createElement('a');
             a.setAttribute('href',`/posts/${post.code}`);
             const img = document.createElement('img');
-            img.setAttribute('src',post.thumbnail);
+            img.setAttribute('src',`/img/thumb/${post.code}`);
             a.appendChild(img);
             postsElem.appendChild(a);
         })

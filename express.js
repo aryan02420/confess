@@ -42,7 +42,7 @@ app.use(bodyParser.json({ limit: "1mb" }))
 app.use(bodyParser.urlencoded({ limit: "1mb", extended: true, parameterLimit: 5 }))
 
 app.use(cookieSession({
-    maxAge: 10 * 60 * 1000,      // 10 minutes
+    maxAge: 30 * 60 * 1000,      // 30 minutes
     keys: [
         process.env.cookieKey1,
         process.env.cookieKey2,
