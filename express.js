@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth_routes');
 const apiRoutes = require('./routes/api_routes');
 const postRoutes = require('./routes/post_routes');
+const imgRoutes = require('./routes/image_routes');
 const adminRoutes = require('./routes/admin_routes');
 const passport = require('passport');
 require('./services/passport_setup');
@@ -82,6 +83,7 @@ app.get('/', (req, res) => {
 });
 app.use('/auth', authSpeedLimiter, authRoutes);
 app.use('/posts', postRoutes);
+app.use('/img', imgRoutes);
 app.use('/admin', allow(['admin']), adminRoutes);
 app.use('/chat', (req, res) => {
     res.render('chat');

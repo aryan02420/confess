@@ -9,15 +9,14 @@ const WH_CB_ID = process.env.WEBHOOK_CONFESSIONBOT_CLIENT_ID;
 const WH_CB_T = process.env.WEBHOOK_CONFESSIONBOT_CLIENT_TOKEN;
 const webhookClient = new Discord.WebhookClient(WH_CB_ID, WH_CB_T);
 
-function newConfession(userName, userColor, image, url) {
-
-    var data = image.split(',')[1]; 
-    var buf = new Buffer.from(data)//.toString('base64');
-    const file = new Discord.MessageAttachment(buf, 'img.jpeg');
+function newConfession(userName, userColor, base_url, code) {
+console.log(code);
+    const file = new Discord.MessageAttachment(`${base_url}/img/thumb/${code}`, `thumb_${code}.jpeg`);
     const embed = new Discord.MessageEmbed()
-	.setImage('attachment://img.jpeg')
+    .attachFiles(file)
+	.setImage(`thumb_${code}.jpeg`)
     .setColor(userColor)
-    .setURL(url);
+    .setURL(`${base_url}/post?c=${code}`);
     
     webhookClient.send('', {
         username: userName,

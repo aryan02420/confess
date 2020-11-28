@@ -118,7 +118,7 @@ const addPost = (req, res) => {
                 code: code.toString(),
                 index: parseInt(count)
             }).save();
-            return {name:req.user.name || alias, color:req.user.color || '#1155dd', img:req.body.image.toString().trim(), url:`https://localhost:3000/posts/${code}`}
+            return {name:req.user.name || alias, color:req.user.color || '#1155dd', base_url:req.headers.origin, code:code}
         }).then((embed) => {
             newConfession(embed.name, embed.color, embed.img, embed.url);
         });
