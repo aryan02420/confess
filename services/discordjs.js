@@ -14,7 +14,7 @@ function newConfession(userName, userColor, base_url, code) {
     .setTitle('new confession')
 	.setImage(`${base_url}/img/thumb/${code}`)
     .setColor(userColor)
-    .setURL(`${base_url}/post/${code}`);
+    .setURL(`${base_url}/posts/${code}`);
     
     webhookClient.send('', {
         username: userName,
