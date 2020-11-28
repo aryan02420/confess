@@ -21,3 +21,8 @@
 [x] make blacklist as rank
 [x] redirect after login
 [x] flash messages
+[ ] notifications
+[ ] replies to comments
+    [ ] comment model
+        [ ] belongs to : post id
+        [ ] replied to : comment id
