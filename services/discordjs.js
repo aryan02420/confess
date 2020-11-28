@@ -10,13 +10,11 @@ const WH_CB_T = process.env.WEBHOOK_CONFESSIONBOT_CLIENT_TOKEN;
 const webhookClient = new Discord.WebhookClient(WH_CB_ID, WH_CB_T);
 
 function newConfession(userName, userColor, base_url, code) {
-console.log(code);
-    const file = new Discord.MessageAttachment(`${base_url}/img/thumb/${code}`, `thumb_${code}.jpeg`);
     const embed = new Discord.MessageEmbed()
-    .attachFiles(file)
-	.setImage(`thumb_${code}.jpeg`)
+    .setTitle('new confession')
+	.setImage(`${base_url}/img/thumb/${code}`)
     .setColor(userColor)
-    .setURL(`${base_url}/post?c=${code}`);
+    .setURL(`${base_url}/post/${code}`);
     
     webhookClient.send('', {
         username: userName,

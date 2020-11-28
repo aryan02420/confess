@@ -121,12 +121,15 @@ const addPost = (req, res) => {
                 time: req.body.time.toString().trim(),
                 code: code.toString(),
                 index: parseInt(count)
-            }).save();
-            return {name:req.user.name || alias, color:req.user.color || '#1155dd', base_url:req.headers.origin, code:code}
-        }).then((embed) => {
-            newConfession(embed.name, embed.color, embed.img, embed.url);
+            }).save((err) => {
+                if (err) {
+                    res.status(422);
+                    res.json({message: 'Invalid Inputs'});
+                } else {
+                    newConfession(req.user.name || alias, req.user.color || '#1155dd', req.headers.origin, code);
+                }
+            });
         });
-
         res.status(200);
         res.json({message:'all ok'});
     } else {
