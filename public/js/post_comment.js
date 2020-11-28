@@ -9,7 +9,7 @@ form.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     const text = formData.get('comment').toString().trim();
-    const code = location.pathname.match( /([0-9a-zA-Z]{7})/ )[0]
+    const code = location.pathname.match( /((?:[a-zA-Z0-9]|\_|\-){7})/ )[0]
 
     const comment = {
         text,

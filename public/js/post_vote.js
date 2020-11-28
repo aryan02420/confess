@@ -3,7 +3,7 @@ const up = document.querySelector('#upvote');
 const down = document.querySelector('#downvote');
 
 let vote = '';
-const code = location.pathname.match( /([0-9a-zA-Z]{7})/ )[0];
+const code = location.pathname.match( /((?:[a-zA-Z0-9]|\_|\-){7})/ )[0];
 
 error.style.display = 'none';
 
@@ -33,7 +33,7 @@ const Vote = () => {
 
     const isValidVote = (data) => {
         return data.vote && (data.vote.toString().trim() === 'UP' || 'DOWN' || 'UNVOTE') &&
-        data.code && data.code.toString().trim() === location.pathname.match( /([0-9a-zA-Z]{7})/ )[0];
+        data.code && data.code.toString().trim() === location.pathname.match( /((?:[a-zA-Z0-9]|\_|\-){7})/ )[0];
     }
 
     if(isValidVote(data)) {

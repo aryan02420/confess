@@ -136,8 +136,8 @@ router.post('/posts/new', allow(['user']), addPost);
 
 const isValidComment = (comment, reqheader) => {
     return comment.text && comment.text.toString().trim() !== '' && comment.text.toString().trim().length <= 200 &&
-           comment.code && comment.code.toString().trim() && /^[a-z0-9A-Z]{7}$/.test(comment.code.toString().trim()) &&
-           comment.code.toString().trim() === reqheader.match( /\/posts\/([0-9a-zA-Z]{7})/ )[1];
+           comment.code && comment.code.toString().trim() && /^(?:[a-zA-Z0-9]|\_|\-){7}$/.test(comment.code.toString().trim()) &&
+           comment.code.toString().trim() === reqheader.match( /\/posts\/((?:[a-zA-Z0-9]|\_|\-){7})/ )[1];
 }
 
 const addComment = (req, res) => {
@@ -165,8 +165,8 @@ router.post('/comment', allow(['user']), addComment);
 
 const isValidVote = (data, reqheader) => {
     return data.vote && (data.vote.toString().trim() === 'UP' || 'DOWN' || 'UNVOTE') &&
-           data.code && data.code.toString().trim() && /^[a-z0-9A-Z]{7}$/.test(data.code.toString().trim()) &&
-           data.code.toString().trim() === reqheader.match( /\/posts\/([0-9a-zA-Z]{7})/ )[1];
+           data.code && data.code.toString().trim() && /^(?:[a-zA-Z0-9]|\_|\-){7}$/.test(data.code.toString().trim()) &&
+           data.code.toString().trim() === reqheader.match( /\/posts\/((?:[a-zA-Z0-9]|\_|\-){7})/ )[1];
 }
 
 const addVote = (req, res) => {
