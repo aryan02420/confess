@@ -1,4 +1,4 @@
-const staticCache = 'sc-8';
+const staticCache = 'sc-12';
 const dynamicCache = 'dc-1';
 const cachedFiles = [
     '/img',
@@ -20,7 +20,9 @@ const cachedFiles = [
     '/js/p5.js',
     '/js/post_comment.js',
     '/js/post_post.js',
-    '/js/sketch.js'
+    '/js/post_vote.js',
+    '/js/sketch.js',
+    '/manifest.webmanifest'
   ]
 
 self.addEventListener('install', function(e) {
