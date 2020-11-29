@@ -111,13 +111,15 @@ const addPost = (req, res) => {
         ]).then(([count]) => {
             let code = dto64(parseInt(req.body.time)-1594000000000);
             const alias = ung.generateUsername(`${code}${req.user._id}`);
+            const maintext = req.body.maintext.toString().replace(/((?:^.{37}))(.+)/gm, '$1\r\n$2').replace(/^\s+/gm,'').replace(/(^(?:[^\r\n]*[\r\n]){17}[^\r\n]*)[\r\n].*/gm, '$1').replace(/\s+/gm,' ').trim();
+            const sign = req.body.sign.toString().replace(/^\s+|\s{2,}$|\s*\n.*/gm,'').replace(/(.{0,24}).*/gm, '$1').trim()
             new Post({
                 author: req.user._id,
                 alias: alias,
                 image: req.body.image.toString().trim(),
                 thumbnail: req.body.thumb.toString().trim(),
-                maintext: req.body.maintext.toString().replace(/((?:^.{37}))(.+)/gm, '$1\r\n$2').replace(/^\s+/gm,'').replace(/(^(?:[^\r\n]*[\r\n]){17}[^\r\n]*)[\r\n].*/gm, '$1').replace(/\s+/gm,' ').trim(),
-                signature: req.body.sign.toString().replace(/^\s+|\s{2,}$|\s*\n.*/gm,'').replace(/(.{0,24}).*/gm, '$1').trim(),
+                maintext: maintext,
+                signature: sign,
                 time: req.body.time.toString().trim(),
                 code: code.toString(),
                 index: parseInt(count)
@@ -126,7 +128,7 @@ const addPost = (req, res) => {
                     res.status(422);
                     res.json({message: 'Invalid Inputs'});
                 } else {
-                    newConfession(req.user.name || alias, req.user.color || '#1155dd', req.headers.origin, code);
+                    newConfession(req.user.name || alias, req.user.color || '#1155dd', req.headers.origin, code, maintext.substring(0, 25)+'...', sign);
                 }
             });
         });
@@ -151,16 +153,6 @@ const addComment = (req, res) => {
     
     if (isValidComment(req.body, req.headers.referer.toString().trim())) {
         let code = req.body.code;
-        let comment = {author:req.user._id, alias:ung.generateUsername(`${code}${req.user._id}`), body:req.body.text.toString().trim(), date: Date.now()};
-        // Post.findOneAndUpdate({code: code}, {$push: {comments:comment}}, (error, success) => {
-        //     if (error) {
-        //         res.status(422);
-        //         res.json({message: 'Invalid Inputs'});
-        //     } else {
-        //         res.status(200);
-        //         res.json({message:'ok'});
-        //     }
-        // });
         const alias = ung.generateUsername(`${code}${req.user._id}`);
         new Comment({
             author: req.user._id,
