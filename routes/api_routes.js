@@ -128,7 +128,7 @@ const addPost = (req, res) => {
                     res.status(422);
                     res.json({message: 'Invalid Inputs'});
                 } else {
-                    newConfession(req.user.name || alias, req.user.color || '#1155dd', req.headers.origin, code, maintext.substring(0, 25)+'...', sign);
+                    newConfession(req.user.name || alias, req.user.color || ((req.user.rank.includes('admin') ? '#cc3333' : (req.user.rank.includes('moderator') ? '#00aa00' : '#1155dd'))) || '#1155dd', req.headers.origin, code, maintext.substring(0, 25)+'...', sign);
                 }
             });
         });
