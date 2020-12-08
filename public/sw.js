@@ -1,4 +1,4 @@
-const staticCache = 'sc-12';
+const staticCache = 'sc-13';
 const dynamicCache = 'dc-1';
 const cachedFiles = [
     '/img',

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Profile = require('../models/profiles');
 const Post = require('../models/posts');
 const Comment = require('../models/comments');
+const Vote = require('../models/votes');
 const {allow, deny} = require('../services/privileges');
 const newConfession =require('../services/discordjs');
 
@@ -43,9 +44,10 @@ const getPost = (req, res) => {
     c = c.toString().trim();    
     if (/^(?:[a-zA-Z0-9]|\_|\-){7}$/.test(c)) {
         Promise.all([
-            Post.findOne({code: c}).populate('author', 'name rank color').select('author alias time code votes -_id').lean(),
-            Comment.find({post_code: c}).sort({date: 1}).populate('author', 'name rank color').select('author alias body date').lean()
-        ]).then(([post, comments]) => {
+            Post.findOne({code: c}).populate('author', 'name rank color').select('author alias time code -_id').lean(),
+            Comment.find({post_code: c}).sort({date: 1}).populate('author', 'name rank color').select('author alias body date').lean(),
+            Vote.findOne({post_code: c}).select('upvotes downvotes -_id').lean()
+        ]).then(([post, comments, votes]) => {
             post.time = timeAgo.format(parseInt(post.time), 'twitter');
             comments.forEach(comment => {
                 if (comment.author._id.toString()===post.author._id.toString()) {
@@ -63,18 +65,19 @@ const getPost = (req, res) => {
             post.author.name = post.author.name || post.alias;
             delete post.author._id;
             delete post.alias;
-            if (post.votes.upvotes.includes(req.user._id.toString())) {
-                post.voted = 'UP';
-            } else if (post.votes.downvotes.includes(req.user._id.toString())) {
-                post.voted = 'DOWN';
+            if (votes.upvotes.includes(req.user._id.toString())) {
+                votes.voted = 'UP';
+            } else if (votes.downvotes.includes(req.user._id.toString())) {
+                votes.voted = 'DOWN';
             } else {
-                post.voted = '';
+                votes.voted = '';
             }
-            post.votes = post.votes.upvotes.length - post.votes.downvotes.length;
+            votes.total = votes.upvotes.length - votes.downvotes.length;
+            delete votes.upvotes;
+            delete votes.downvotes;
             res.status(200);
-            res.json({post, comments});
+            res.json({post, comments, votes});
         }).catch((err) => {
-            console.log(err);
             res.status(422);
             res.json({message: 'Post Not Found1'});
         });
@@ -122,13 +125,15 @@ const addPost = (req, res) => {
                 signature: sign,
                 time: req.body.time.toString().trim(),
                 code: code.toString(),
-                index: parseInt(count)
+                index: parseInt(count),
+                deleted: false,
+                anonymous: true
             }).save((err) => {
                 if (err) {
                     res.status(422);
                     res.json({message: 'Invalid Inputs'});
                 } else {
-                    newConfession(req.user.name || alias, req.user.color || ((req.user.rank.includes('admin') ? '#cc3333' : (req.user.rank.includes('moderator') ? '#00aa00' : '#1155dd'))) || '#1155dd', req.headers.origin, code, maintext.substring(0, 25)+'...', sign);
+                    newConfession(req.user.name || alias, req.user.color || ((req.user.rank.includes('admin') ? '#cc3333' : (req.user.rank.includes('moderator') ? '#00aa00' : '#1155dd'))) || '#1155dd', req.headers.origin, code, maintext.substring(0, 70)+'...', sign);
                 }
             });
         });
@@ -160,6 +165,8 @@ const addComment = (req, res) => {
             body:req.body.text.toString().trim(),
             date: Date.now(),
             post_code: code.toString().trim(),
+            deleted: false,
+            anonymous: true
         }).save();
         res.status(200);
         res.json({message:'all ok'});
@@ -183,43 +190,37 @@ const addVote = (req, res) => {
     if (isValidVote(req.body, req.headers.referer.toString().trim())) {
 
         let vote = req.body.vote.toString().trim();
+        console.log(vote)
         let code = req.body.code;
         const uid = req.user._id.toString();
-        Promise.all([Post.findOneAndUpdate({code: code}, {$pull: {'votes.downvotes': uid}} , (error, success) => {
+        Promise.all([Vote.findOneAndUpdate({post_code: code}, {$pull: {'downvotes': uid}}, { upsert: true }, (error, success) => {
             if (error) {
                 res.status(422);
                 res.json({message: 'Invalid-Inputs'});
             }
-        }),Post.findOneAndUpdate({code: code}, {$pull: {'votes.upvotes': uid}} , (error, success) => {
+        }),Vote.findOneAndUpdate({post_code: code}, {$pull: {'upvotes': uid}}, { upsert: true }, (error, success) => {
             if (error) {
                 res.status(422);
                 res.json({message: 'Invalid-Inputs'});
             }
         })]).then(() => {
             if (vote === 'UP') {
-                Post.findOneAndUpdate({code: code}, {$push: {'votes.upvotes': uid}} , (error, success) => {
+                Vote.findOneAndUpdate({post_code: code}, {$push: {'upvotes': uid}}, (error, success) => {
                     if (error) {
                         res.status(422);
                         res.json({message: 'Invalid-Inputs'});
-                    } else {
-                        res.status(200);
-                        res.json({message:'ok'});
                     }
                 });
             } else if (vote === 'DOWN') {
-                Post.findOneAndUpdate({code: code}, {$push: {'votes.downvotes': uid}} , (error, success) => {
+                Vote.findOneAndUpdate({post_code: code}, {$push: {'downvotes': uid}}, (error, success) => {
                     if (error) {
                         res.status(422);
                         res.json({message: 'Invalid-Inputs'});
-                    } else {
-                        res.status(200);
-                        res.json({message:'ok'});
                     }
                 });
-            } else {
-                res.status(200);
-                res.json({message:'ok'});
             }
+            res.status(200);
+            res.json({message:'ok'});
         }).catch((err) => {
             res.status(422);
             res.json(err);

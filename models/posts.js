@@ -18,19 +18,8 @@ const postSchema = new Schema({
         unique: true
     },
     index: Number,
-    votes: {
-        upvotes: [String],
-        downvotes: [String],
-    },
-    comments: [{
-        author: {
-            type :Schema.Types.ObjectId,
-            ref: Profile
-        },
-        alias: String,
-        body: String,
-        date: String 
-    }]
+    deleted: Boolean,
+    anonymous: Boolean
 });
 
 const Post = mongoose.model('post', postSchema);

@@ -24,8 +24,7 @@ fetch(API_URL1+'?c='+id.toString())
         return response.json();
     }
 }).then((data) => {
-    post = data.post;
-    comms = data.comments;
+    const {post, comments:comms, votes} = data;
     name.innerText = post.author.name;
     if (post.author.rank.includes('admin')) name.innerHTML += SHIELD_A;
     else if (post.author.rank.includes('moderator')) name.innerHTML += SHIELD_M;
@@ -36,10 +35,10 @@ fetch(API_URL1+'?c='+id.toString())
     name.style.color = post.author.color || ((post.author.rank.includes('admin') ? '#cc3333' : (post.author.rank.includes('moderator') ? '#00aa00' : '#1155dd')));
     name.style.fill = post.author.color || ((post.author.rank.includes('admin') ? '#cc3333' : (post.author.rank.includes('moderator') ? '#00aa00' : '#1155dd')));
     time.innerText = post.time;
-    document.querySelector('#votecount').innerText = post.votes;
-    if (post.voted === 'UP') {
+    document.querySelector('#votecount').innerText = votes.total;
+    if (votes.voted === 'UP') {
         document.querySelector('#upvote').classList.add('soft-inv')
-    } else if (post.voted === 'DOWN') {
+    } else if (votes.voted === 'DOWN') {
         document.querySelector('#downvote').classList.add('soft-inv')
     }
     post_img.src = `/img/${post.code}`;

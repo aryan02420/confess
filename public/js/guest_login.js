@@ -3,7 +3,7 @@ let formData = new URLSearchParams();
 formData.append('username', 'guest');
 formData.append('password', 'guest');
 document.querySelector('#guest-signin')
-.addEventListener('click', () => {
+.addEventListener('click', (event) => {
     event.preventDefault();
     fetch(POST_URL, {
         method: 'POST',

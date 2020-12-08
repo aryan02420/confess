@@ -12,6 +12,8 @@ const commentSchema = new Schema({
     body: String,
     date: String,
     post_code: String,
+    deleted: Boolean,
+    anonymous: Boolean
     // repliedTo: {
     //     type :Schema.Types.ObjectId,
     //     ref: Comment
