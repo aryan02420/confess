@@ -12,7 +12,23 @@ const { isValidObjectId } = require('mongoose');
 TimeAgo.addLocale(en);
 const timeAgo = new TimeAgo('en-US');
 
+if (!(process.env.NODE_ENV === "production")) {
+    require('dotenv').config();
+}
+
 const ung = require('@aryan02420/usernamegen');
+
+const startTime = Date.now()
+
+router.get('/', (req, res) => {
+    res.json({
+        ver: process.env.VERSION,
+        uptime: Date.now() - startTime
+    })
+});
+
+
+
 
 const getPosts = (req, res) => {
     let { skip = 0, limit = 6 } = req.query;
@@ -65,6 +81,9 @@ const getPost = (req, res) => {
             post.author.name = post.author.name || post.alias;
             delete post.author._id;
             delete post.alias;
+            votes = votes || {};
+            votes.upvotes = votes.upvotes || [];
+            votes.downvotes = votes.downvotes || [];
             if (votes.upvotes.includes(req.user._id.toString())) {
                 votes.voted = 'UP';
             } else if (votes.downvotes.includes(req.user._id.toString())) {
@@ -72,7 +91,7 @@ const getPost = (req, res) => {
             } else {
                 votes.voted = '';
             }
-            votes.total = votes.upvotes.length - votes.downvotes.length;
+            votes.total = (votes.upvotes.length - votes.downvotes.length) || 0;
             delete votes.upvotes;
             delete votes.downvotes;
             res.status(200);

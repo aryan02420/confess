@@ -14,7 +14,7 @@
 [x] flash messages
 [ ] notifications
 [ ] better error messages
-[ ] declare version and let user update sw/pwa
+[-] declare version and let user update sw/pwa
 [ ] loading icon
 
 ## extra
