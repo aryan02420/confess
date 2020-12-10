@@ -65,7 +65,8 @@ const getPost = (req, res) => {
             Vote.findOne({post_code: c}).select('upvotes downvotes -_id').lean()
         ]).then(([post, comments, votes]) => {
             post.time = timeAgo.format(parseInt(post.time), 'twitter');
-            comments.forEach(comment => {
+            comments = JSON.parse(JSON.stringify(comments));
+            comments.forEach((comment) => {
                 if (comment.author._id.toString()===post.author._id.toString()) {
                     comment.author.rank.push('op');
                 }
@@ -81,7 +82,7 @@ const getPost = (req, res) => {
             post.author.name = post.author.name || post.alias;
             delete post.author._id;
             delete post.alias;
-            votes = votes || {};
+            votes = Object.assign({}, {upvotes:[], downvotes:[]}, votes)
             votes.upvotes = votes.upvotes || [];
             votes.downvotes = votes.downvotes || [];
             if (votes.upvotes.includes(req.user._id.toString())) {
@@ -209,7 +210,6 @@ const addVote = (req, res) => {
     if (isValidVote(req.body, req.headers.referer.toString().trim())) {
 
         let vote = req.body.vote.toString().trim();
-        console.log(vote)
         let code = req.body.code;
         const uid = req.user._id.toString();
         Promise.all([Vote.findOneAndUpdate({post_code: code}, {$pull: {'downvotes': uid}}, { upsert: true }, (error, success) => {
