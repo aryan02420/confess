@@ -13,7 +13,7 @@ const voteSchema = new Schema({
         required: true
       },
     post_code: String,
-    comment_code: String
+    comment_code: String,
 });
 
 const Vote = mongoose.model('vote', voteSchema);

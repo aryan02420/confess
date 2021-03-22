@@ -1,7 +1,11 @@
-const staticCache = 'sc-13';
-const dynamicCache = 'dc-1';
+let ver = '230320';
+fetch('/api')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.ver);
+  })
+
 const cachedFiles = [
-    '/img',
     '/css/style.css',
     '/css/global.css',
     '/images/48.png',
@@ -25,9 +29,9 @@ const cachedFiles = [
     '/manifest.webmanifest'
   ]
 
-self.addEventListener('install', function(e) {
-  e.waitUntil(
-    caches.open(staticCache).then(function(cache) {
+self.addEventListener('install', evt => {
+  evt.waitUntil(
+    caches.open('cache-'+ver).then((cache) => {
       return cache.addAll(cachedFiles);
     })
   );
@@ -37,7 +41,7 @@ self.addEventListener('activate', evt => {
   evt.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(keys
-        .filter(key => key !== staticCache && key !== dynamicCache)
+        .filter(key => key !== ('cache-'+ver))
         .map(key => caches.delete(key))
       );
     })
@@ -46,7 +50,7 @@ self.addEventListener('activate', evt => {
    
 self.addEventListener('fetch', evt => {
   evt.respondWith(
-    caches.match(evt.request).then(function(response) {
+    caches.match(evt.request).then(response => {
       return response || fetch(evt.request);
     })
   );

@@ -22,6 +22,7 @@
     [-] Delete posts and comments
     [-] Delete Users
     [ ] Give user ranks
+    [ ] announcements
 [ ] chat
 [ ] faq
     [ ] privacy
@@ -41,3 +42,5 @@
 # FrontEnd OverHaul
 [ ] vue
 [ ] tailwind
+
+// 3d card effect https://www.pixijs.com/gallery

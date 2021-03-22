@@ -20,11 +20,16 @@ if (!(process.env.NODE_ENV === "production")) {
 const {allow, deny} = require('./services/privileges');
 const slowDown = require("express-slow-down");
 const port = process.env.PORT;
+
+app.use((req, res, next) => {
+    console.log(req.method, req.path);
+    next();
+});
         
 
 app.enable('trust proxy', 'localhost');
 // redirect to https
-app.use ((req, res, next) => {
+app.use((req, res, next) => {
     if (req.secure || req.hostname === 'localhost') {
         next();
     } else {
